@@ -1,3 +1,6 @@
+import { Button } from "../ui/button";
+import { Github } from 'lucide-react';
+
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID
 
 const Login = () => {
@@ -8,9 +11,14 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <button onClick={handleLogin}>Login with GitHub</button>
+    <div className="flex items-center justify-center w-full h-dvh">
+      <div className="bg-white w-96 py-16 px-10 flex flex-col items-center justify-center rounded-xl shadow-lg">
+        <h2 className="text-2xl font-bold mb-10">Login</h2>
+        <Button onClick={handleLogin}>
+          <Github />
+          Login with GitHub
+        </Button>
+      </div>
     </div>
   );
 }

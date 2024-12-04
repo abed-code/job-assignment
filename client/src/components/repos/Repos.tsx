@@ -4,24 +4,31 @@ import RepoItem from "./RepoItem"
 import RepoDialog from "./RepoDialog"
 import Spinner from "../ui/spinner"
 import { Button } from "../ui/button"
-import { RepoMode } from "@/types"
+import { RepoActionMode } from "@/types"
+import BranchDialog from "../branches/BranchDialog"
 
 const Repos: FC = () => {
   const repos = useAppStore(state => state.repos)
   const isLoading = useAppStore(state => state.isFetchingRepos)
-  const createRepoOpen = useAppStore(state => state.createRepoOpen)
-  const setRepoOpen = useAppStore(state => state.setRepoOpen)
+  const repoDialogOpen = useAppStore(state => state.repoDialogOpen)
+  const setDialogRepoOpen = useAppStore(state => state.setRepoDialogOpen)
+  const branchDialogOpen = useAppStore(state => state.branchDialogOpen)
+  const setBranchDialogOpen = useAppStore(state => state.setBranchDialogOpen)
 
-  const onOpenChange = (open: boolean) => {
-    setRepoOpen(open)
+  const onRepoOpenChange = (open: boolean) => {
+    setDialogRepoOpen(open)
+  }
+
+  const onBranchOpenChange = (open: boolean) => {
+    setBranchDialogOpen(open)
   }
 
   return (
-    <div className="container max-w-4xl mx-auto mt-10 bg-white rounded-md shadow-md p-5">
+    <div className="container max-w-4xl mx-auto mt-10 bg-white rounded-md shadow-md p-5 mb-10">
       <div className="w-full flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Repos</h1>
 
-        <Button onClick={() => setRepoOpen(true, RepoMode.Create)}>
+        <Button onClick={() => setDialogRepoOpen(true, RepoActionMode.Create)}>
           Create new repo
         </Button>
       </div>
@@ -34,14 +41,15 @@ const Repos: FC = () => {
             <RepoItem 
               key={repo.id} 
               repo={repo} 
-              onEditClick={() => setRepoOpen(true, RepoMode.Update, repo.id)}
-              onDeleteClick={() => setRepoOpen(true, RepoMode.Delete, repo.id)} 
+              onEditClick={() => setDialogRepoOpen(true, RepoActionMode.Update, repo.id)}
+              onDeleteClick={() => setDialogRepoOpen(true, RepoActionMode.Delete, repo.id)} 
             />
           )}
         </div>
       }
 
-      <RepoDialog open={createRepoOpen} onOpenChange={onOpenChange} />
+      <RepoDialog open={repoDialogOpen} onOpenChange={onRepoOpenChange} />
+      <BranchDialog open={branchDialogOpen} onOpenChange={onBranchOpenChange} />
     </div>
   )
 }

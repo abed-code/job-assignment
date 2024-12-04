@@ -21,3 +21,9 @@ export interface UpdateRepoDto {
   has_projects?: boolean
   has_wiki?: boolean
 }
+
+export interface CommitDto {
+  message: string
+  filename: string
+  content: string
+}

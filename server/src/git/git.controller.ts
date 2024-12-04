@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Headers } from '@nestjs/common';
 import { GitService } from './git.service';
-import { CreateRepoDto, OAuthDto, UpdateRepoDto } from './git.dto';
+import { CommitDto, CreateRepoDto, OAuthDto, UpdateRepoDto } from './git.dto';
 
 @Controller('git')
 export class GitController {
@@ -76,6 +76,85 @@ export class GitController {
       await this.gitService.deleteRepo(token, owner, repo)
 
       return { message: "delete repo successfully" }
+    } catch(error) {
+      console.error(error.response.data)
+      throw error
+    }
+  }
+
+  @Get('branches/:owner/:repo')
+  async getBranches(
+    @Headers('token') token: string,
+    @Param('owner') owner: string,
+    @Param('repo') repo: string
+  ) {
+    try {
+      const res = await this.gitService.fetchBranches(token, owner, repo);
+      return { branches: res.data };
+    } catch(error) {
+      console.error(error.response.data)
+      throw error
+    }
+  }
+
+  @Post('branches/:owner/:repo/:branch')
+  async createBranch(
+    @Headers('token') token: string,
+    @Param('owner') owner: string,
+    @Param('repo') repo: string,
+    @Param('branch') branch: string,
+  ) {
+    try {
+      const res = await this.gitService.createBranch(token, owner, repo, branch);
+      return { branch: res.data };
+    } catch(error) {
+      console.error(error.response.data)
+      throw error
+    }
+  }
+
+  @Delete('branches/:owner/:repo/:branch')
+  async deleteBranch(
+    @Headers('token') token: string,
+    @Param('owner') owner: string,
+    @Param('repo') repo: string,
+    @Param('branch') branch: string,
+  ) {
+    try {
+      const res = await this.gitService.deleteBranch(token, owner, repo, branch);
+      return { branch: res.data };
+    } catch(error) {
+      console.error(error.response.data)
+      throw error
+    }
+  }
+
+  @Post('commit/:owner/:repo/:branch')
+  async commit(
+    @Headers('token') token: string,
+    @Param('owner') owner: string,
+    @Param('repo') repo: string,
+    @Param('branch') branch: string,
+    @Body() commitDto: CommitDto,
+  ) {
+    try {
+      return await this.gitService.commit(token, owner, repo, branch, commitDto);
+    } catch(error) {
+      console.error(error)
+      throw error
+    }
+  }
+
+  @Get('branches/:owner/:repo/:branch/contents')
+  async fetchBranchContent(
+    @Headers('token') token: string,
+    @Param('owner') owner: string,
+    @Param('repo') repo: string,
+    @Param('branch') branch: string
+  ) {
+    try {
+      const res = await this.gitService.fetchBranchContent(token, owner, repo, branch)
+      return { contents: res.data };
     } catch(error) {
       console.error(error.response.data)
       throw error

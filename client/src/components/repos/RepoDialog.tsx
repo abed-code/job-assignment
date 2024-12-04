@@ -8,7 +8,7 @@ import {
 import RepoForm from './RepoForm'
 import { FC } from 'react'
 import RepoDeleteForm from './RepoDeleteForm'
-import { RepoMode } from '@/types'
+import { RepoActionMode } from '@/types'
 
 type Props = {
   open: boolean
@@ -22,7 +22,7 @@ const RepoDialog: FC<Props> = ({ open, onOpenChange }) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
-        {repoMode === RepoMode.Delete ? 
+        {repoMode === RepoActionMode.Delete ? 
           <RepoDeleteForm />
           :
           <>
